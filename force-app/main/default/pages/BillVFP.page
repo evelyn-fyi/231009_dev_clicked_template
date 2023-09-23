@@ -1,7 +1,5 @@
-<apex:page standardController="Account" renderAs="pdf">
+<apex:page standardController="Bill__c" renderAs="pdf">
     <apex:pageBlock>
-    You're looking at the Recent Bills for {!account.name}:
+    You're looking at the Recent Bill for {!Bill__c.Account__r.Name}:
     </apex:pageBlock>
-
-    <apex:relatedList list="Bills__r" title="Recent Bills"/>
 </apex:page>
