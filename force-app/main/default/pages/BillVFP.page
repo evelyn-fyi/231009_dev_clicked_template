@@ -1,0 +1,5 @@
+<apex:page standardController="Bill__c" renderAs="pdf">
+    <apex:pageBlock>
+    You're looking at the Recent Bill for {!Bill__c.Account__r.Name}:
+    </apex:pageBlock>
+</apex:page>
