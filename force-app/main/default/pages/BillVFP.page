@@ -1,0 +1,7 @@
+<apex:page standardController="Account" renderAs="pdf">
+    <apex:pageBlock>
+    You're looking at the Recent Bills for {!account.name}:
+    </apex:pageBlock>
+
+    <apex:relatedList list="Bills__r" title="Recent Bills"/>
+</apex:page>
