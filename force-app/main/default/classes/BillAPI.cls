@@ -1,6 +1,6 @@
 public with sharing class BillAPI {
     
-    public static void getBills() {
+    public static List<Bill__c> getBills() {
         HttpRequest req = new HttpRequest();
         req.setEndpoint('callout:Billing_API');
         req.setMethod('GET');
@@ -31,6 +31,10 @@ public with sharing class BillAPI {
         }
 
         insert billsToInsert;
+
+        List<Bill__c> insertedBills = [SELECT Id FROM Bill__c WHERE Id IN :billsToInsert];
+
+        return insertedBills;
     }
 
     public class BillWrapper {
