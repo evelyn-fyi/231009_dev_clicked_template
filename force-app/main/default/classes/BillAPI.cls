@@ -47,7 +47,11 @@ public with sharing class BillAPI {
     //into a list of instances of our wrapper class, BillWrapper:
     //
     //List<BillWrapper> bwList = (List<BillWrapper>)JSON.deserialize(responseBody, List<BillWrapper>.class);
-
+    //
+    //once we have a list of BillWrapper objects (bwList), we will iterate over the
+    //bwList, instantiate a new Bill__c object record, and assign the values of the
+    //BillWrapper properties to the fields on the Bill__c record.
+    
     public class BillWrapper {
         public String billId;
         public String accountName;
