@@ -37,6 +37,17 @@ public with sharing class BillAPI {
         return insertedBills;
     }
 
+    //this is what's known as a wrapper class. A wrapper class
+    //allows us to create an instance of a class with the properties
+    //we specify. In this case, we are creating a class that will hold
+    //the properties for the BillId, AccountName, and Balance, which will
+    //be populated from the JSON structure that is stored in our external
+    //data source. Once we get the body of our HTTP callout, we will use
+    //the following line of code to transform the response body (responseBody)
+    //into a list of instances of our wrapper class, BillWrapper:
+    //
+    //List<BillWrapper> bwList = (List<BillWrapper>)JSON.deserialize(responseBody, List<BillWrapper>.class);
+
     public class BillWrapper {
         public String billId;
         public String accountName;
