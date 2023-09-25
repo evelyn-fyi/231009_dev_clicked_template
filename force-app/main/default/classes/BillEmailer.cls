@@ -26,7 +26,7 @@ public with sharing class BillEmailer {
 
             Messaging.EmailFileAttachment attach = new Messaging.EmailFileAttachment();
             attach.Body = emailsWithBills.get(email);
-            attach.FileName = 'Bill-' + Date.Today().day() + '-' + Date.Today().Month() + '-' + Date.Today().Year();
+            attach.FileName = 'Bill-' + Date.Today().day() + '-' + Date.Today().Month() + '-' + Date.Today().Year() + '.pdf';
             attach.ContentType = 'application/pdf';
 
             mail.setFileAttachments(new Messaging.EmailFileAttachment[]{attach});
