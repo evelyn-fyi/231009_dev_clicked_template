@@ -26,67 +26,14 @@
         Display information from the account here in an organized fasion,
         such as  phone number, email address, billing address, and shipping address.
 
-        HintL use apex:panelGrid and apex:PanelGroup to display this nicely.
+        Hint: use apex:panelGrid and apex:PanelGroup to display this nicely.
     -->
-    <apex:panelGrid columns="2" style="width: 100%">
-        <apex:panelGroup>
-            <h3>Email</h3>
-            {!Bill__c.Account__r.Email__c}
-        </apex:panelGroup>
 
-        <apex:panelGroup>
-            <h3>Phone</h3>
-            {!Bill__c.Account__r.Phone}
-            <br/>
-        </apex:panelGroup>
-        
-        <apex:panelGroup>
-            <h3>Billing Address</h3>
-            {!Bill__c.Account__r.BillingStreet}
-            <br/>
-            {!Bill__c.Account__r.BillingCity}, {!Bill__c.Account__r.BillingState}, {!Bill__c.Account__r.BillingCountry}
-            <br/>
-            {!Bill__c.Account__r.BillingPostalCode}
-            <br/>
-        </apex:panelGroup>
-        
-        <apex:panelGroup>
-            <h3>Shipping Address</h3>
-            {!Bill__c.Account__r.ShippingStreet}
-            <br/>
-            {!Bill__c.Account__r.ShippingCity}, {!Bill__c.Account__r.ShippingState}, {!Bill__c.Account__r.ShippingCountry}
-            <br/>
-            {!Bill__c.Account__r.ShippingPostalCode}
-            <br/>
-        </apex:panelGroup>
-    </apex:panelGrid>
-    
-    <br/>
-    <br/>
-    <br/>
 
     <!--
         Build a table showing the Bill Summary (Bill Name, Bill Balance, and Bill Id) here.
         Hint: use apex:pageBlockTable to display this in a table.
     -->
-    <apex:pageBlock>
-        <apex:pageBlockTable value="{!record}" var="bill" id="billSummary" style="width: 100%;">
-            <apex:facet name="header">Bill Summary</apex:facet>
 
-            <apex:column style="border: 1px solid;">
-                <apex:facet name="header">Name</apex:facet>
-                <apex:outputText value="{!bill.name}" style="padding-left: 5px;"/>
-            </apex:column>
-
-            <apex:column style="border: 1px solid;">
-                <apex:facet name="header">Balance</apex:facet>
-                <apex:outputText value="${!bill.Balance__c}" style="padding-left: 5px;"/>
-            </apex:column>
-
-            <apex:column style="border: 1px solid;">
-                <apex:facet name="header">Bill Id</apex:facet>
-                <apex:outputText value="{!bill.Bill_Id__c}" style="padding-left: 5px;" />
-            </apex:column>
-        </apex:pageBlockTable>
-    </apex:pageblock>
+    
 </apex:page>
