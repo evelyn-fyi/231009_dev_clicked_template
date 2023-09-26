@@ -1,0 +1,39 @@
+<apex:page standardController="Bill__c" renderAs="pdf">
+    <!--
+        The following outputTexts that are not rendered are used so that we
+        can access the values for the fields in a table per documentation here:
+        https://help.salesforce.com/s/articleView?id=000385722&type=1
+    -->
+    <apex:outputText value="{!Bill__c.Name}" rendered="false"/>
+    <apex:outputText value="{!Bill__c.Balance__c}" rendered="false"/>
+    <apex:outputText value="{!Bill__c.Bill_Id__c}" rendered="false"/>
+
+    <!--
+        Because we are using the standard controller for the child object
+        we can access fields on the Parent object by utilizing the relationship
+        between the Bill__c and Account object, Account__r, as seen below:
+    -->
+    You are looking at the Most Recent Bill for {!Bill__c.Account__r.Name}.
+    <!--
+        The general format of fields on the Parent object will be:
+        ChildObject__c.ParentObject__r.FieldName__c
+
+        The general format of fields on the Child object will be:
+        ChildObject__c.FieldName__c
+    -->
+
+    <!--
+        Display information from the account here in an organized fasion,
+        such as  phone number, email address, billing address, and shipping address.
+
+        Hint: use apex:panelGrid and apex:PanelGroup to display this nicely.
+    -->
+
+
+    <!--
+        Build a table showing the Bill Summary (Bill Name, Bill Balance, and Bill Id) here.
+        Hint: use apex:pageBlockTable to display this in a table.
+    -->
+
+    
+</apex:page>
