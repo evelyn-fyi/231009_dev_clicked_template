@@ -1,2 +1,2 @@
-# 231009_dev_clicked_solution
-The solutions repository for the data for the 10/09/2023 Developer Sprint for Clicked.
+# 231009_dev_clicked_template
+>>>>>>> 99eb0419961e18560842c1631bb8370c76f6de5f
