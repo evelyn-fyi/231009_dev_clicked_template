@@ -6,31 +6,26 @@ public with sharing class BillEmailer {
         List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
 
         //iterate over the keyset of the emailsWithBills map and instantiate a single Messaging.SingleEmailMessage
-        //object. Set the bccAddress to the email from the iteration, set a PlainTextBody, and use the following
-        //to attach the PDF blob to the email:
-        //
-        // Messaging.EmailFileAttachment attach = new Messaging.EmailFileAttachment();
-        // attach.Body = emailsWithBills.get(email);
-        // attach.FileName = 'Bill-' + Date.Today().day() + '-' + Date.Today().Month() + '-' + Date.Today().Year();
-        // attach.ContentType = 'application/pdf';
-        // mail.setFileAttachments(new Messaging.EmailFileAttachment[]{attach});
-        //
-        //add the Messaging.SingleEmailMessage object to the list inside of the loop, and send the email outside of the loop.
+        //object. Set the bccAddress to the email from the iteration, set a PlainTextBody, and set a Subject for the
+        //Messaging.SingleEmailMessage object.
 
         for(String email : emailsWithBills.keySet()) {
             Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
 
             mail.setBccAddresses(new String[]{email});
             mail.setPlainTextBody('Please see attached for your most recent bill.');
+            mail.setSubject('Cricket Wireless Bill - ' + Date.Today().Month() + '-' + Date.Today().Day() + '-' + Date.Today().Year());
 
-
+            //use the following
+            //to attach the PDF blob to the email:
             Messaging.EmailFileAttachment attach = new Messaging.EmailFileAttachment();
             attach.Body = emailsWithBills.get(email);
-            attach.FileName = 'Bill-' + Date.Today().day() + '-' + Date.Today().Month() + '-' + Date.Today().Year() + '.pdf';
+            attach.FileName = 'Bill-' + Date.Today().Month() + '-' + Date.Today().Day() + '-' + Date.Today().Year() + '.pdf';
             attach.ContentType = 'application/pdf';
 
             mail.setFileAttachments(new Messaging.EmailFileAttachment[]{attach});
 
+            //add the Messaging.SingleEmailMessage object to the list inside of the loop, and send the email outside of the loop.
             emailsToSend.add(mail);
         }
 
