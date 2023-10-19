@@ -24,3 +24,7 @@ No Salesforce Developer Certifications required for this experience. An added be
 This experience will run from October 9-30th, with sessions after 4 PM PST.
 
 #This 3 week immersive experience is designed to assist you in developing the skills necessary to pass the Salesforce PD1 exam.
+
+
+Changes...
+Making some changes for the first Clicked Dev Sprint to check how to push from VS Code to GitHub
