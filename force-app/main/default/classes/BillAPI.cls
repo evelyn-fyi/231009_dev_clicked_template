@@ -1,28 +1,45 @@
 public with sharing class BillAPI {
-    
-    public static void getBills() {
+    public static list<Bill__c> getBills() {
         //start by creating an HttpRequest object and set the endpoint and method.
-
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('callout:Billing_API');
+        request.setMethod('GET');
 
         //set up an Http object and an HTTPResponse Object and use the .getBody() method here.
-
+        Http http = new Http();
+        HTTPResponse response = http.send(request);
+        String responseBody = response.getBody();
+        System.debug('KRS DEBUG LOG ==> responseBody: ' + responseBody);
 
         //Use the following to deserialize the JSON response into a wrapper class:
-
+        List<BillWrapper> bwList = (List<BillWrapper>) JSON.deserialize(
+            responseBody,
+            List<BillWrapper>.class
+        );
+        System.debug('KRS DEBUG LOG ==> bwList: ' + bwList);
 
         //create a list of bills to insert
-
+        List<Bill__c> billsToInsert = new List<Bill__c>();
 
         //query for active accounts (Active__c = 'Yes')
-
+        List<Account> activeAccList = [
+            SELECT Id, Name
+            FROM Account
+            WHERE Active__c = 'Yes'
+            WITH SECURITY_ENFORCED
+        ];
+        System.debug('KRS DEBUG LOG ==> activeAccList: ' + activeAccList);
 
         //create an active account map in the form of Map<String, Id>
-
+        Map<String, Id> activeAccMap = new Map<String, Id>();
 
         //iterate over the list of active accounts, and use the .put() method of the Map class
         // to insert the account name and Id as the key value pair.
         //https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_map.htm
-
+        for (Account acc : activeAccList) {
+            activeAccMap.put(acc.Name, acc.Id);
+        }
+        System.debug('KRS DEBUG LOG ==> activeAccMap: ' + activeAccMap);
 
         //iterate over the list of BillWrappers, bwList, and create a new bill in each iteration.
         //Match the new bill fields with the properties of the BillWrapper class, using the following for
@@ -31,9 +48,79 @@ public with sharing class BillAPI {
         //at the end of the for loop, add the newly created bill to a list of bills to insert
         //remember, DML should not go in for loops!
 
+        // Iterate over the list of BillWrappers
+        for (BillWrapper bw : bwList) {
+            if (activeAccMap.containsKey(bw.accountName)) {
+                Bill__c billToInsert = new Bill__c();
 
-        //finally, insert the new bills list
+                // Match the Account Name in the BillWrapper to the Account Id in the map
+                billToInsert.Account__c = activeAccMap.get(bw.accountName);
+                System.debug(
+                    'KRS DEBUG LOG ==> billToInsert.Account__c: ' +
+                    billToInsert.Account__c
+                );
 
+                // Match the BillId to the Bill_Id__c
+                billToInsert.Bill_Id__c = bw.billId;
+                System.debug(
+                    'KRS DEBUG LOG ==> billToInsert.Bill_Id__c: ' +
+                    billToInsert.Bill_Id__c
+                );
+
+                // Match the Balance from the BillWrapper to the Balance__c field
+                billToInsert.Balance__c = Decimal.valueOf(
+                    bw.balance.replace('$', '')
+                );
+                System.debug(
+                    'KRS DEBUG LOG ==> billToInsert.Balance__c: ' +
+                    billToInsert.Balance__c
+                );
+
+                // Add newly created bill to list of bills to insert
+                billsToInsert.add(billToInsert);
+                System.debug('KRS DEBUG LOG ==> billToInsert: ' + billToInsert);
+            } else {
+                System.debug(
+                    'KRS DEBUG LOG ==> Account Name not found in Active Account Map.'
+                );
+            }
+        }
+
+        // Make sure we can update the database before even trying to new bills.
+        // NOTE: Just checking if Bill_ID field passes ApexCRUDViolation. Should check all fields.
+        if (Schema.sObjectType.Bill__c.fields.Bill_Id__c.isCreateable()) {
+            // Insert the list of new bills
+            if (billsToInsert.size() > 0) {
+                //finally, insert the new bills list
+                System.debug(
+                    'KRS DEBUG LOG ==> ' +
+                        billsToInsert.size() +
+                        ' bills to insert.'
+                );
+                insert billsToInsert;
+            } else {
+                System.debug('KRS DEBUG LOG ==> No bills to insert.');
+            }
+        } else {
+            System.debug(
+                'KRS DEBUG LOG ==> Insufficient permissions to update Bill object.'
+            );
+            return null;
+        }
+
+        // Query for the inserted bills
+        List<Bill__c> insertedBills = [
+            SELECT Id, Name, Account__c, Bill_Id__c, Balance__c
+            FROM Bill__c
+            WHERE Id IN :billsToInsert
+            WITH SECURITY_ENFORCED
+        ];
+
+        // Return the newly inserted bills list
+        System.debug(
+            'KRS DEBUG LOG ==> insertedBills to return: ' + insertedBills
+        );
+        return insertedBills;
     }
 
     //this is what's known as a wrapper class. A wrapper class
@@ -50,7 +137,7 @@ public with sharing class BillAPI {
     //once we have a list of BillWrapper objects (bwList), we will iterate over the
     //bwList, instantiate a new Bill__c object record, and assign the values of the
     //BillWrapper properties to the fields on the Bill__c record.
-    
+
     public class BillWrapper {
         public String billId;
         public String accountName;
